@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DreamNovel Social</title>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg-color: #1f2a44;
+            --card-bg: #161f33;
+            --accent-blue: #8ed0ff;
+            --accent-coral: #ff8a8a;
+            --text-main: #ffffff;
+            --text-secondary: #b0b8c9;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            width: 100%;
+            padding: 1rem 2rem;
+            background: rgba(31, 42, 68, 0.8);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(142, 208, 255, 0.1);
+            display: flex;
+            justify-content: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--accent-blue);
+            text-shadow: 0 0 20px rgba(142, 208, 255, 0.3);
+        }
+
+        main {
+            margin-top: 70px;
+            width: 100%;
+            max-width: 450px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .post-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            height: 85vh;
+            max-height: 800px;
+        }
+
+        .video-container {
+            position: relative;
+            flex-grow: 1;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .interaction-sidebar {
+            position: absolute;
+            right: 12px;
+            bottom: 155px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            z-index: 3;
+        }
+
+        .action-btn {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.1);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .action-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .action-btn.liked {
+            color: var(--accent-coral);
+            background: rgba(255, 138, 138, 0.25);
+        }
+
+        .action-btn i, .action-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .btn-label {
+            font-size: 0.75rem;
+            margin-top: 2px;
+            font-weight: 600;
+        }
+
+        .post-footer {
+            padding: 30px 20px;
+            background: linear-gradient(to top, rgba(22, 31, 51, 1) 70%, transparent);
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 2;
+        }
+
+        .username {
+            font-weight: 700;
+            color: var(--accent-blue);
+            margin-bottom: 6px;
+            display: block;
+            font-size: 1rem;
+        }
+
+        .post-description {
+            font-size: 0.95rem;
+            line-height: 1.4;
+            color: var(--text-main);
+        }
+
+        .separate-para {
+            margin-top: 4px;
+            margin-bottom: 8px;
+        }
+
+        .highlight-text {
+            display: block;
+            color: var(--accent-blue);
+            font-weight: bold;
+            font-size: 0.85rem;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .play-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: var(--transition);
+            pointer-events: none;
+            color: white;
+        }
+
+        .video-container:hover .play-overlay {
+            opacity: 0.6;
+        }
+
+        .comments-modal {
+            position: absolute;
+            bottom: -100%;
+            left: 0;
+            right: 0;
+            height: 75%;
+            background: var(--card-bg);
+            border-radius: 24px 24px 0 0;
+            z-index: 10;
+            transition: bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            border-top: 1px solid rgba(142, 208, 255, 0.2);
+        }
+
+        .comments-modal.active {
+            bottom: 0;
+        }
+
+        .comments-header {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-weight: 700;
+            position: relative;
+        }
+
+        .close-comments {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .comments-list {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .comment-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .comment-user {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--accent-blue);
+            display: flex;
+            align-items: center;
+        }
+
+        .comment-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.3;
+        }
+
+        .author-reply {
+            margin-left: 15px;
+            padding-left: 12px;
+            border-left: 2px solid var(--accent-coral);
+            margin-top: 6px;
+        }
+
+        .author-tag {
+            background: var(--accent-coral);
+            color: white;
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            margin-left: 5px;
+        }
+
+        @media (max-width: 500px) {
+            main {
+                padding: 0;
+                margin-top: 60px;
+            }
+            .post-card {
+                height: calc(100vh - 60px);
+                max-height: none;
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">DreamNovel Social</div>
+    </header>
+
+    <main id="feed">
+        <article class="post-card">
+            <div class="video-container" id="videoWrapper">
+                <video id="postVideo" loop playsinline muted>
+                    <source src="https://assets.mixkit.co/videos/preview/mixkit-mysterious-woman-walking-in-a-dark-forest-at-night-42283-large.mp4" type="video/mp4">
+                </video>
+                <div class="play-overlay" id="playIcon">
+                    <i data-lucide="play-circle" style="width: 64px; height: 64px;"></i>
+                </div>
+            </div>
+
+            <div class="interaction-sidebar">
+                <button class="action-btn" id="likeBtn">
+                    <i data-lucide="heart" id="likeIcon"></i>
+                    <span class="btn-label">1.2k</span>
+                </button>
+                <button class="action-btn" id="commentBtn">
+                    <i data-lucide="message-circle"></i>
+                    <span class="btn-label">30</span>
+                </button>
+                <button class="action-btn" id="shareBtn">
+                    <i data-lucide="share-2"></i>
+                    <span class="btn-label">Compartir</span>
+                </button>
+            </div>
+
+            <div class="post-footer">
+                <span class="username">@DreamNovel</span>
+                <p class="post-description">
+                    Creo que alguien te está siguiendo… 👀
+                </p>
+                <p class="post-description">
+                    Pero tranquilo, seguro que es tu imaginación.
+                </p>
+                <p class="post-description separate-para">
+                    🙂 ¿…verdad?
+                </p>
+                <span class="highlight-text">Midnight Campus — Demo disponible</span>
+            </div>
+
+            <!-- Panel de Comentarios -->
+            <div class="comments-modal" id="commentsModal">
+                <div class="comments-header">
+                    Comentarios (30)
+                    <div class="close-comments" id="closeComments">
+                        <i data-lucide="x"></i>
+                    </div>
+                </div>
+                <div class="comments-list" id="commentsList">
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        const video = document.getElementById('postVideo');
+        const videoWrapper = document.getElementById('videoWrapper');
+        const playIcon = document.getElementById('playIcon');
+        const likeBtn = document.getElementById('likeBtn');
+        const commentBtn = document.getElementById('commentBtn');
+        const shareBtn = document.getElementById('shareBtn');
+        const commentsModal = document.getElementById('commentsModal');
+        const closeComments = document.getElementById('closeComments');
+        const commentsList = document.getElementById('commentsList');
+
+        const rawComments = [
+            { user: "@NocturnalUser", text: "¿Esto es parte de un juego? ¡Me ha dado escalofríos!", reply: "¡Así es! Es un fragmento de la demo de Midnight Campus. ¿Te atreves?" },
+            { user: "@GamerExtreme", text: "La atmósfera está increíblemente lograda.", reply: "¡Gracias! Trabajamos mucho en la iluminación." },
+            { user: "@Luna_99", text: "Esa sombra del final... 😱" },
+            { user: "@PixelHunter", text: "¿Cuándo sale la versión completa?" },
+            { user: "@HorrorFanatic", text: "Necesito jugar esto ya mismo.", reply: "¡La demo ya está disponible en el link del perfil!" },
+            { user: "@DevArt", text: "El diseño de sonido es de 10." },
+            { user: "@IndieLover", text: "Apoyando los proyectos locales, ¡vamos!" },
+            { user: "@ScaryGamesYT", text: "Haré un video de esto hoy mismo." },
+            { user: "@Maria_Ghost", text: "¿Es para PC o consola?" },
+            { user: "@GhostBuster", text: "No miréis atrás..." },
+            { user: "@MidnightWalker", text: "Yo vivo cerca de un campus así y ahora tengo miedo." },
+            { user: "@AlphaTester", text: "He probado la demo y es brutal." },
+            { user: "@SoundDesigner", text: "¿Qué motor usáis?" },
+            { user: "@Shadow_01", text: "Hay un secreto en el minuto 0:05.", reply: "¡Vaya ojo tienes! Pocos se dan cuenta." },
+            { user: "@NightOwl", text: "Amo este estilo visual." },
+            { user: "@Rafa_Gamer", text: "¿Tiene sustos o es solo tensión?" },
+            { user: "@CreepyPasta", text: "Esto me recuerda a una leyenda urbana..." },
+            { user: "@LevelUp", text: "¡Seguid así!" },
+            { user: "@MisterySolver", text: "He analizado el video frame a frame." },
+            { user: "@DarkSoul", text: "La oscuridad se siente real." },
+            { user: "@VoxelWorld", text: "¡Increíble!" },
+            { user: "@PlayerOne", text: "¿Hay puzzles?" },
+            { user: "@GameDesignStud", text: "Muy buena narrativa visual." },
+            { user: "@UrbanExplorer", text: "Parece metraje real de una cámara de seguridad." },
+            { user: "@DemoSeeker", text: "Descargando ahora mismo...", reply: "¡Cuéntanos qué te parece después!" },
+            { user: "@HorrorKing", text: "Hacía tiempo que no veía algo tan pulido." },
+            { user: "@ChillGamer", text: "Demasiado miedo para mí, pero se ve genial." },
+            { user: "@RetroVibes", text: "Me encanta el filtro que tiene." },
+            { user: "@StoryTeller", text: "¿De qué trata la historia exactamente?" },
+            { user: "@Dreamer_X", text: "¡Por fin algo nuevo!" }
+        ];
+
+        function loadComments() {
+            commentsList.innerHTML = '';
+            rawComments.forEach(c => {
+                let html = `
+                    <div class="comment-item">
+                        <span class="comment-user">${c.user}</span>
+                        <p class="comment-text">${c.text}</p>
+                `;
+                if(c.reply) {
+                    html += `
+                        <div class="author-reply">
+                            <span class="comment-user">@DreamNovel <span class="author-tag">AUTOR</span></span>
+                            <p class="comment-text">${c.reply}</p>
+                        </div>
+                    `;
+                }
+                html += `</div>`;
+                commentsList.innerHTML += html;
+            });
+        }
+
+        loadComments();
+
+        async function safePlay() {
+            try {
+                const playPromise = video.play();
+                if (playPromise !== undefined) {
+                    await playPromise;
+                    playIcon.style.opacity = '0';
+                }
+            } catch (error) {}
+        }
+
+        videoWrapper.addEventListener('click', () => {
+            if (video.paused) {
+                safePlay();
+            } else {
+                video.pause();
+                playIcon.style.opacity = '1';
+            }
+        });
+
+        likeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            likeBtn.classList.toggle('liked');
+            const icon = likeBtn.querySelector('svg');
+            if (likeBtn.classList.contains('liked')) {
+                icon.style.fill = 'var(--accent-coral)';
+                icon.style.stroke = 'var(--accent-coral)';
+                likeBtn.style.transform = 'scale(1.3)';
+                setTimeout(() => likeBtn.style.transform = 'scale(1)', 200);
+            } else {
+                icon.style.fill = 'none';
+                icon.style.stroke = 'currentColor';
+            }
+        });
+
+        commentBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            commentsModal.classList.add('active');
+        });
+
+        closeComments.addEventListener('click', () => {
+            commentsModal.classList.remove('active');
+        });
+
+        shareBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const label = shareBtn.querySelector('.btn-label');
+            const originalText = label.innerText;
+            label.innerText = "¡Copiado!";
+            setTimeout(() => label.innerText = originalText, 2000);
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    safePlay();
+                } else {
+                    video.pause();
+                }
+            });
+        }, { threshold: 0.6 });
+
+        observer.observe(videoWrapper);
+    </script>
+</body>
+</html>
