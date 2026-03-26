@@ -172,8 +172,8 @@
                 </video>
             </div>
             <div class="interaction-sidebar">
-                <button class="action-btn" onclick="toggleLike(this)"><i data-lucide="heart"></i><span class="btn-label">1.2k</span></button>
-                <button class="action-btn" onclick="openComments(1)"><i data-lucide="message-circle"></i><span class="btn-label">15</span></button>
+                <button class="action-btn" onclick="toggleLike(this)"><i data-lucide="heart"></i><span class="btn-label">1.5k</span></button>
+                <button class="action-btn" onclick="openComments(1)"><i data-lucide="message-circle"></i><span class="btn-label" id="label-count-1">0</span></button>
                 <button class="action-btn"><i data-lucide="share-2"></i><span class="btn-label">Share</span></button>
             </div>
             <div class="post-footer">
@@ -195,8 +195,8 @@
                 </video>
             </div>
             <div class="interaction-sidebar">
-                <button class="action-btn" onclick="toggleLike(this)"><i data-lucide="heart"></i><span class="btn-label">850</span></button>
-                <button class="action-btn" onclick="openComments(2)"><i data-lucide="message-circle"></i><span class="btn-label">28</span></button>
+                <button class="action-btn" onclick="toggleLike(this)"><i data-lucide="heart"></i><span class="btn-label">2.1k</span></button>
+                <button class="action-btn" onclick="openComments(2)"><i data-lucide="message-circle"></i><span class="btn-label" id="label-count-2">0</span></button>
                 <button class="action-btn"><i data-lucide="share-2"></i><span class="btn-label">Share</span></button>
             </div>
             <div class="post-footer">
@@ -222,23 +222,85 @@
 
         const commentsData = {
             1: [
-                { u: "@User_1", t: "Esa sombra me dio miedo.", r: "¡Esa es la idea! Pronto más detalles." },
-                { u: "@HorrorFan", t: "¡Increíble atmósfera!" },
-                { u: "@Nocturno", t: "¿...Verdad? Esa frase me mató." }
+                { u: "@User_1", t: "Esa sombra me dio mucho miedo.", r: "¡Esa es la idea! Pronto revelaremos más detalles." },
+                { u: "@HorrorFan", t: "¡La atmósfera es increíble! Sientes el agobio." },
+                { u: "@Nocturno", t: "¿...Verdad? Esa frase final me ha dejado helado.", r: "A veces la imaginación es el peor enemigo..." },
+                { u: "@PixelScary", t: "¿Alguien más vio algo moverse en el fondo a la izquierda?" },
+                { u: "@ShadowHunter", t: "Necesito jugar esto ya, se ve muy pulido." },
+                { u: "@MisterioMan", t: "Ese sonido de pasos me ha puesto los pelos de punta." },
+                { u: "@Elena_G", t: "No puedo esperar a que salga el juego completo." },
+                { u: "@Rafa_Indie", t: "¿Habrá modo cooperativo?" },
+                { u: "@CreepyVibes", t: "He tenido que encender la luz de mi cuarto." },
+                { u: "@PlayerZero", t: "Gráficos brutales para ser una demo." },
+                { u: "@Nightmare", t: "La música de fondo encaja perfectamente." },
+                { u: "@Detective_X", t: "Analizando cada frame para buscar pistas." },
+                { u: "@LuzBaja", t: "Me recordó a una película de culto." },
+                { u: "@SustoOmuerte", t: "Ese final es pura tensión." },
+                { u: "@GamerLegacy", t: "¡Apoyando el talento de DreamNovel!" },
+                { u: "@DarkSoul", t: "La iluminación está muy bien lograda." },
+                { u: "@Inquisidor", t: "¿Cuándo anuncian la fecha de lanzamiento?" },
+                { u: "@SilentStep", t: "Me sentí identificado con el personaje." },
+                { u: "@HorrorMaster", t: "De los mejores teasers que he visto este año." },
+                { u: "@AlphaTester", t: "La fluidez del movimiento es genial." },
+                { u: "@Vortex_G", t: "He saltado de la silla." },
+                { u: "@MisterioResuelto", t: "Creo saber quién es la persona que sigue." },
+                { u: "@LunaLlena", t: "Hermoso y aterrador al mismo tiempo." },
+                { u: "@SoundPro", t: "El diseño de sonido es envolvente." },
+                { u: "@RetroHorror", t: "Tiene ese aire a los clásicos." },
+                { u: "@PortalGamer", t: "¡Descargando la demo ahora!" },
+                { u: "@X-Files", t: "La verdad está ahí fuera... o detrás de ti." },
+                { u: "@TerrorPsicologico", t: "Esto es lo que me gusta, tensión pura." },
+                { u: "@Z_Zero", t: "¿Se podrá personalizar el personaje?" },
+                { u: "@UltimaParada", t: "Simplemente impresionante." },
+                { u: "@Nova_G", t: "¡Hype por las nubes!", r: "¡Nos alegra mucho que te guste!" }
             ],
             2: [
-                { u: "@SafetyFirst", t: "Gracias por los consejos, nunca se sabe.", r: "¡Es importante estar siempre alerta!" },
-                { u: "@GamerGirl", t: "¿Esto pasará en el juego?", r: "Sí, tendrás que usar estos consejos para sobrevivir." },
-                { u: "@StreetWise", t: "Lo de no ir a casa es clave." }
+                { u: "@SafetyFirst", t: "Me ha servido mucho, gracias por compartirlo.", r: "¡Lo más importante es tu seguridad siempre!" },
+                { u: "@GamerGirl", t: "Qué importante es no ir a casa si notas algo raro.", r: "Exacto, mejor buscar un lugar público de inmediato." },
+                { u: "@StreetWise", t: "Muchísimas gracias, consejos así salvan vidas." },
+                { u: "@Elena_Safe", t: "Qué bueno saber esto, me siento más tranquila." },
+                { u: "@UrbanLife", t: "Lo de buscar gente es clave, gracias por recordarlo." },
+                { u: "@SecurityPro", t: "Me ha servido de mucho para mi trayecto nocturno, ¡gracias!" },
+                { u: "@AlexRunner", t: "Súper útiles estas recomendaciones. A veces uno entra en pánico y no piensa." },
+                { u: "@MariaP", t: "Me siento más segura teniendo estos tips en mente." },
+                { u: "@Juan_Tech", t: "Muy buena iniciativa de seguridad." },
+                { u: "@Laura_V", t: "¡Mil gracias! Lo compartiré con mis amigas." },
+                { u: "@Nico_G", t: "Importante mantener la calma en situaciones así." },
+                { u: "@Sofi_H", t: "Me ha servido mucho para mi regreso de la universidad." },
+                { u: "@Carlos_M", t: "Consejos prácticos y directos. Excelente." },
+                { u: "@Ana_Libre", t: "Gracias por cuidar de la comunidad." },
+                { u: "@Pedro_S", t: "Siempre hay que estar alerta." },
+                { u: "@Marta_R", t: "Súper agradecida por este post." },
+                { u: "@David_K", t: "Información vital para todos." },
+                { u: "@Lucia_T", t: "Qué gran ayuda, gracias de verdad." },
+                { u: "@Rober_G", t: "Me ha servido de mucho para orientarme." },
+                { u: "@Cris_Z", t: "Muy necesario hoy en día." },
+                { u: "@Pau_S", t: "Gracias por la ayuda constante." },
+                { u: "@Victor_X", t: "Esos detalles marcan la diferencia." },
+                { u: "@Sara_M", t: "Muy útiles los pasos a seguir." },
+                { u: "@Dani_V", t: "¡Gracias mil por la info!" },
+                { u: "@Esther_Q", t: "Me ayuda a estar más atenta." },
+                { u: "@Fran_B", t: "Gran trabajo difundiendo seguridad." },
+                { u: "@Irene_L", t: "Gracias, me siento más preparada." },
+                { u: "@Toni_G", t: "Siempre es bueno repasar estas cosas." },
+                { u: "@Bea_N", t: "Me ha servido para quitarme un poco el miedo." },
+                { u: "@Hugo_P", t: "¡Muchas gracias por los consejos!" },
+                { u: "@Gabi_R", t: "Esencial saber reaccionar así.", r: "¡Esa es la meta, saber qué hacer!" }
             ]
         };
 
-        // Función de ayuda para manejar promesas de video de forma segura
+        // Función para sincronizar los contadores visuales con los datos reales
+        function syncCommentCounts() {
+            Object.keys(commentsData).forEach(id => {
+                const label = document.getElementById('label-count-' + id);
+                if(label) label.innerText = commentsData[id].length;
+            });
+        }
+
         async function playVideoSafely(videoElement) {
             try {
                 await videoElement.play();
             } catch (err) {
-                // Silenciar errores de interrupción (AbortError)
                 if (err.name !== 'AbortError') {
                     console.error("Error al reproducir video:", err);
                 }
@@ -268,8 +330,11 @@
         function openComments(id) {
             const list = document.getElementById('commentsList');
             const modal = document.getElementById('commentsModal');
+            const count = document.getElementById('commentCount');
             list.innerHTML = '';
             
+            count.innerText = `Comentarios (${commentsData[id].length})`;
+
             commentsData[id].forEach(c => {
                 let html = `<div class="comment-item"><span class="c-user">${c.u}</span><p>${c.t}</p>`;
                 if(c.r) html += `<div class="author-reply"><span class="c-user">@DreamNovel <span class="author-tag">AUTOR</span></span><p>${c.r}</p></div>`;
@@ -284,6 +349,9 @@
             document.getElementById('commentsModal').classList.remove('active');
         }
 
+        // Inicializar sincronización al cargar
+        syncCommentCounts();
+
         const feed = document.getElementById('mainFeed');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -291,7 +359,6 @@
                 if (entry.isIntersecting) {
                     playVideoSafely(vid);
                 } else {
-                    // Solo pausamos si el video no está ya pausado
                     if (!vid.paused) {
                         vid.pause();
                     }
@@ -299,6 +366,10 @@
             });
         }, { threshold: 0.8 });
 
+        document.querySelectorAll('.post-card').forEach(post => observer.observe(post));
+    </script>
+</body>
+</html>
         document.querySelectorAll('.post-card').forEach(post => observer.observe(post));
     </script>
 </body>
